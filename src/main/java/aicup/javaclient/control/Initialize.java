@@ -56,6 +56,7 @@ public class Initialize {
            
         } catch(Exception e) {
             System.out.println("Error in reading conf.json (the path of the file should be in src\\main\\java\\aicup\\javaclient\\config.json)");
+            System.exit(0);
         }
         
         this.restTemplate = new RestTemplate();
@@ -95,14 +96,16 @@ public class Initialize {
                 }catch (Exception e){
                     System.out.println("there is a problem in the server response");
                     System.out.println((String) jsonResponse.get("error"));
+                    System.exit(0);
                 }
             } catch (ParseException e) {
                 System.out.println("there is a problem in the server response");
                 System.out.println("there is no error message in the response");
+                System.exit(0);
             }
         }catch (ResourceAccessException e){
             System.out.println("Connection Refused or Unavailable: " + e.getMessage());
-        
+            System.exit(0);
         }
     }
 
@@ -115,9 +118,48 @@ public class Initialize {
     }
 
     @GetMapping("/init")
-    public void initializer(){
-        System.out.println("---------------------------------########____________");
+    public String initializer(){
+        System.out.println("Test 1 completed");
+        return "ok";
     }
+
+
+
+    public void ready(){
+        //initializing the request
+        String path = url + "/ready";
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("x-access-token", token);
+        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+        //sending the request
+        try{
+            ResponseEntity<String> response = restTemplate.exchange(path, HttpMethod.GET, requestEntity, String.class);
+
+            //ResponseEntity<String> response = restTemplate.getForEntity(path, String.class);
+            
+            if(response.getStatusCode().is2xxSuccessful()){
+                System.out.println("ready");
+            }
+            else{
+                JSONParser parser = new JSONParser();
+                try {
+                    JSONObject jsonResponse = (JSONObject) parser.parse(response.getBody());
+                    System.out.println((String)jsonResponse.get("error"));
+                    
+                }catch (Exception e) {
+                    System.out.println("Error with communicating with the server or Json parsing Error");
+                }
+                
+                System.out.println("can't make a ready request");
+                System.exit(0);
+            }
+        }catch(ResourceAccessException e){
+            System.out.println("Connection Refused or Unavailable: " + e.getMessage());
+            System.exit(0);
+        }
+
+    }
+
 
 
 

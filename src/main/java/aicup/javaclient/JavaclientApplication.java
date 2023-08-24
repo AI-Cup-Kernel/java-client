@@ -17,6 +17,7 @@ public class JavaclientApplication {
 		SpringApplication app = new SpringApplication(JavaclientApplication.class);
         app.setDefaultProperties(Collections.singletonMap("server.port", init.getMyPort()));
         app.run(args);
+		init.ready();
     
 
 		
