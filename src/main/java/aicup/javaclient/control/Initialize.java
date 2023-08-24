@@ -14,12 +14,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 
 
 @Service
+@RestController
 public class Initialize {
 
 
@@ -65,9 +68,6 @@ public class Initialize {
 
     public void login(){
 
-
-        // TODO: handle the exceptions
-
         // Constructing the url
         String path = url + "/login";
         
@@ -104,6 +104,44 @@ public class Initialize {
             System.out.println("Connection Refused or Unavailable: " + e.getMessage());
         
         }
-
     }
+
+
+
+    // a function to validate the token in the server requests
+    private boolean checkToken(){
+
+        return true;
+    }
+
+    @GetMapping("/init")
+    public void initializer(){
+        System.out.println("---------------------------------########____________");
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //setters and getters 
+
+
+    public int getMyPort(){
+        return myPort;
+    }
+
+
+
+
+
 }
