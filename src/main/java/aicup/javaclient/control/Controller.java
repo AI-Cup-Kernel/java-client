@@ -24,6 +24,7 @@ public class Controller {
     }
     
     
+    //TODO: yout token checnking has a problem the thread will be created either ways
     
     @GetMapping("/init")
     public ResponseEntity<String> initializer(@RequestHeader("x-access-token") String tokenFromHeader){
@@ -66,16 +67,12 @@ public class Controller {
 
     }
 
-    
-
-
-
 
 
     // a function to validate the token in the server requests
     private ResponseEntity<String> validateRequest(String tokenFromHeader){
-
-        if (tokenFromHeader.equals(init.getToken())) {
+        System.out.println(tokenFromHeader);
+        if (tokenFromHeader.equals(Integer.toString(init.getPassword()))) {
             return ResponseEntity.ok("ok");
         }
         JSONObject errorObject = new JSONObject();

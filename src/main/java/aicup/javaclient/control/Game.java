@@ -29,8 +29,10 @@ public class Game {
     private MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
 
 
+    //TODO: setters and getters
+
     public Game(){
-        Initialize init = Initialize.getInsIance();
+        Initialize init = Initialize.getInstance();
         token = init.getToken();
         url = init.getUrl();
         myTurn = false;
@@ -38,7 +40,6 @@ public class Game {
     }   
 
     // TODO: handle output (errors status codes, ....)
-    // TODO: when i'm getting a 400 status code the program is throwing exceptions and not reading the json
 
     //tested
     public Map<Integer, Integer> getOwners(){
@@ -84,7 +85,7 @@ public class Game {
         return responseMap;
     }
 
-
+    // tested/2 test it in the turn state
     public void nextState(){
         JSONObject jsonResponse = request("/next_state",HttpMethod.GET);
         if(Objects.isNull(jsonResponse.get("error"))){
@@ -252,5 +253,15 @@ public class Game {
         responseMap.put(keyInt, valueInt);
         }
         return responseMap;
-    }   
+    } 
+    
+    
+
+    //getters and setters
+    public void setMyTurn(boolean myTurn){
+        this.myTurn = myTurn;
+    }
+    public boolean getMyTurn(){
+        return myTurn;
+    }
 }

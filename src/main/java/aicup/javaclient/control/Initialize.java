@@ -3,7 +3,6 @@ package aicup.javaclient.control;
 
 import java.io.FileReader;
 import java.security.SecureRandom;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 import org.json.simple.*;
@@ -16,8 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
@@ -38,7 +35,7 @@ public class Initialize {
     private int id; // the player id
     private final RestTemplate restTemplate;
     private String url; // the full server url
-    private Game game; // the game controller
+    
 
     private static Initialize initialize;
 
@@ -67,7 +64,7 @@ public class Initialize {
         
         this.restTemplate = new RestTemplate();
     }
-    public static Initialize getInsIance(){
+    public static Initialize getInstance(){
         if(Objects.isNull(initialize)){
             initialize = new Initialize();
         }

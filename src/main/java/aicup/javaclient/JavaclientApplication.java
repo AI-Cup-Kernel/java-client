@@ -13,7 +13,7 @@ public class JavaclientApplication {
 
 	public static void main(String[] args) {
 		//SpringApplication.run(JavaclientApplication.class, args);
-		Initialize init = Initialize.getInsIance();
+		Initialize init = Initialize.getInstance();
 		init.login();
 		SpringApplication app = new SpringApplication(JavaclientApplication.class);
         app.setDefaultProperties(Collections.singletonMap("server.port", init.getMyPort()));
