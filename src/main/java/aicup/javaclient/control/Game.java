@@ -30,36 +30,37 @@ public class Game {
         restTemplate = new RestTemplate();
     }   
 
-    
 
 
 
     public Map<Integer, Integer> getOwners(){
+        JSONObject jsonResponse = request("/get_owners");
+        return jsonToIntMap(jsonResponse);
+
+    }
+    public Map<Integer, Integer> getNumberOfTroops(){
+            
+        JSONObject jsonResponse = request("/get_troops_count");
+        return jsonToIntMap(jsonResponse);
+
+    }
+    
+
+    private JSONObject request(String path){
             //initializing the request
-            String path = url + "/get_owners";
+            String fullUrl = url + path;
             HttpHeaders headers = new HttpHeaders();
             headers.set("x-access-token", token);
             HttpEntity<String> requestEntity = new HttpEntity<>(headers);
            
             //sending the request
             try{
-                ResponseEntity<String> response = restTemplate.exchange(path, HttpMethod.GET, requestEntity, String.class);
-                //System.out.println(response.getBody());
-                //reading the json response
+                ResponseEntity<String> response = restTemplate.exchange(fullUrl, HttpMethod.GET, requestEntity, String.class);
+                
                 JSONParser parser = new JSONParser();
                 try {
                     JSONObject jsonResponse = (JSONObject) parser.parse(response.getBody());
-
-                    // Convert JSON response to a HashMap
-                    Map<Integer, Integer> responseMap = new HashMap<>();
-                    for (Object key : jsonResponse.keySet()) {
-                        String keyString = (String) key;
-                        int keyInt = Integer.parseInt(keyString);
-                        int valueInt = ((Long) jsonResponse.get(key)).intValue();
-                        responseMap.put(keyInt, valueInt);
-                    }
-                
-                    return responseMap;
+                    return jsonResponse;
                 } catch (Exception e) {
                     System.out.println("Error with communicating with the server or Json parsing Error");
                 }
@@ -68,11 +69,10 @@ public class Game {
                 System.out.println("Connection Refused or Unavailable: " + e.getMessage());
             }
         return null;
-        
     }
     
 
-    public Map<Integer,Integer> ObjectMapToIntMap(JSONObject jsonResponse){
+    private Map<Integer,Integer> ObjectMapToIntMap(JSONObject jsonResponse){
         Map<Integer, Integer> IntMap = new HashMap<>();
         
         //Converting the response to Integer Hashmap
@@ -87,4 +87,17 @@ public class Game {
         }
         return IntMap;         
     }
+
+    private Map<Integer,Integer> jsonToIntMap(JSONObject jsonResponse){
+        Map<Integer, Integer> responseMap = new HashMap<>();
+        for (Object key : jsonResponse.keySet()) {
+        String keyString = (String) key;
+        int keyInt = Integer.parseInt(keyString);
+        int valueInt = ((Long) jsonResponse.get(key)).intValue();
+        responseMap.put(keyInt, valueInt);
+        }
+        return responseMap;
+    
+
+    }   
 }
