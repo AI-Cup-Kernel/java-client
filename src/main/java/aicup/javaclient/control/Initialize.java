@@ -3,6 +3,8 @@ package aicup.javaclient.control;
 
 import java.io.FileReader;
 import java.security.SecureRandom;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 import org.json.simple.*;
 import org.json.simple.parser.*;
@@ -21,8 +23,9 @@ import org.springframework.web.client.RestTemplate;
 
 
 
+
+
 @Service
-@RestController
 public class Initialize {
 
 
@@ -35,9 +38,12 @@ public class Initialize {
     private int id; // the player id
     private final RestTemplate restTemplate;
     private String url; // the full server url
+    private Game game; // the game controller
+
+    private static Initialize initialize;
 
     // a contructor to initialize the needed variables
-    public Initialize(){
+    private Initialize(){
 
         // TODO: disabling the proxy
         
@@ -60,9 +66,12 @@ public class Initialize {
         }
         
         this.restTemplate = new RestTemplate();
-
-
-
+    }
+    public static Initialize getInsIance(){
+        if(Objects.isNull(initialize)){
+            initialize = new Initialize();
+        }
+        return initialize;
     }
 
     
@@ -75,7 +84,6 @@ public class Initialize {
         // Create form data using MultiValueMap
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("token", Integer.toString(password));
-
         // Request headers
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -109,22 +117,6 @@ public class Initialize {
         }
     }
 
-
-
-    // a function to validate the token in the server requests
-    private boolean checkToken(){
-
-        return true;
-    }
-
-    @GetMapping("/init")
-    public String initializer(){
-        System.out.println("Test 1 completed");
-        return "ok";
-    }
-
-
-
     public void ready(){
         //initializing the request
         String path = url + "/ready";
@@ -134,10 +126,9 @@ public class Initialize {
         //sending the request
         try{
             ResponseEntity<String> response = restTemplate.exchange(path, HttpMethod.GET, requestEntity, String.class);
-
-            //ResponseEntity<String> response = restTemplate.getForEntity(path, String.class);
             
             if(response.getStatusCode().is2xxSuccessful()){
+                System.out.println(response.getBody());
                 System.out.println("ready");
             }
             else{
@@ -157,29 +148,30 @@ public class Initialize {
             System.out.println("Connection Refused or Unavailable: " + e.getMessage());
             System.exit(0);
         }
-
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     //setters and getters 
-
-
     public int getMyPort(){
         return myPort;
+    }
+    public int getPassword(){
+        return password;
+    }
+    public String getToken(){
+        return token;
+    }
+    public String getServerIp(){
+        return serverIp;
+    }
+    public String getServerPort(){
+        return Integer.toString(serverPort);
+    }
+    public int getId(){
+        return id;
+    }
+    public String getUrl(){
+        return url;
     }
 
 
