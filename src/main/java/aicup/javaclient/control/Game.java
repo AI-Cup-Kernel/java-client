@@ -1,6 +1,5 @@
 package aicup.javaclient.control;
 
-import java.lang.reflect.Executable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,15 +9,14 @@ import java.util.Objects;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 public class Game {
@@ -40,6 +38,7 @@ public class Game {
     }   
 
     // TODO: handle output (errors status codes, ....)
+    // TODO: when i'm getting a 400 status code the program is throwing exceptions and not reading the json
 
     //tested
     public Map<Integer, Integer> getOwners(){
@@ -86,20 +85,22 @@ public class Game {
     }
 
 
-
-    //TODO: its not working im sending the request and getting the error reponse but the 
-    //jsonResponse object is still null and on the kernal side im gettint unknown error message
     public void nextState(){
         JSONObject jsonResponse = request("/next_state",HttpMethod.GET);
         if(Objects.isNull(jsonResponse.get("error"))){
-            System.out.println("Jooooon");
+           System.out.println("Jooooon");
         }
+        else{
+            System.out.println("error:" + jsonResponse.get("error"));
+        }
+        
     }
 
+    //tested
     public boolean putOneTroop(int nodeId) throws Exception{
         formData.clear();
         formData.add("node_id",Integer.toString(nodeId)); 
-        JSONObject jsonResponse = request(token, HttpMethod.POST);
+        JSONObject jsonResponse = request("/put_one_troop", HttpMethod.POST);
         if(jsonResponse.containsKey("error")){
             throw new Exception((String)jsonResponse.get("error"));
         }
@@ -107,16 +108,18 @@ public class Game {
             return true;
         }
     }
+
+    // tested/2 write a code to test it in turn state
     public boolean putTroop(int nodeId, int numberOfTroops) throws Exception{
         formData.clear();
         formData.add("node_id",Integer.toString(nodeId));
         formData.add("number_of_troops",Integer.toString(numberOfTroops));
-        JSONObject jsonResponse = request(token, HttpMethod.POST);
+        JSONObject jsonResponse = request("/put_troop", HttpMethod.POST);
         if(jsonResponse.containsKey("error")){
             throw new Exception((String)jsonResponse.get("error"));
         }
         else{
-            return true;
+            return true;     
         }
     }
     //tested
@@ -125,12 +128,14 @@ public class Game {
         int playerId = ((Long) jsonResponse.get("player_id")).intValue();
         return playerId;  
     }
+
+
     public boolean attack(int originNodeId, int targetNodeId,float fraction) throws Exception{
         formData.clear();
         formData.add("attacking_id",Integer.toString(originNodeId));
         formData.add("target_id",Integer.toString(targetNodeId));
         formData.add("fraction",Float.toString(fraction));
-        JSONObject jsonResponse = request(token, HttpMethod.POST);
+        JSONObject jsonResponse = request("/attack", HttpMethod.POST);
         if(jsonResponse.containsKey("error")){
             throw new Exception((String)jsonResponse.get("error"));
         }
@@ -144,7 +149,7 @@ public class Game {
         formData.add("source",Integer.toString(originNodeId));
         formData.add("destination",Integer.toString(destinationNodeId));
         formData.add("troop_count",Float.toString(numberOfTroops));
-        JSONObject jsonResponse = request(token, HttpMethod.POST);
+        JSONObject jsonResponse = request("/move_troop", HttpMethod.POST);
         if(jsonResponse.containsKey("error")){
             throw new Exception((String)jsonResponse.get("error"));
         }
@@ -213,8 +218,15 @@ public class Game {
             }      
             //sending the request
             try{
-                ResponseEntity<String> response = restTemplate.exchange(fullUrl, httpMethod, requestEntity, String.class);
-                //System.out.println(response.getBody());
+                
+                ResponseEntity<String> response = null;
+                try{
+                    response = restTemplate.exchange(fullUrl, httpMethod, requestEntity, String.class);
+                }catch(HttpClientErrorException e){
+                    response = new ResponseEntity<>(e.getResponseBodyAsString(), HttpStatus.BAD_REQUEST);
+                }catch(Exception e) {
+                    response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+                }
                 JSONParser parser = new JSONParser();
                 try {
                     JSONObject jsonResponse = (JSONObject) parser.parse(response.getBody());
@@ -224,7 +236,9 @@ public class Game {
                 }
                 
             } catch (Exception e) {
-                System.out.println("Connection Refused or Unavailable: " + e.getMessage());
+                //System.out.println("Connection Refused or Unavailable: " + e.getMessage());
+
+                System.out.println("aaahh");
             }
         return null;
     } 
