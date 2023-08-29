@@ -23,7 +23,8 @@ public class Controller {
         init = Initialize.getInstance();
     }
     
-        
+    
+    
     @GetMapping("/init")
     public ResponseEntity<String> initializer(@RequestHeader("x-access-token") String tokenFromHeader){
         ResponseEntity<String> response = validateRequest(tokenFromHeader);
@@ -31,7 +32,12 @@ public class Controller {
             game.setMyTurn(true);
             System.out.println("initializer started");
             Thread thread = new Thread(() -> {
-                PlayerCode.initializer(game); 
+                try{
+                    PlayerCode.initializer(game); 
+                }catch(Exception e){
+                    e.printStackTrace();
+                    System.exit(1);
+                }
             });
            thread.start(); 
     }
@@ -46,7 +52,12 @@ public class Controller {
             game.setMyTurn(true);
             System.out.println("turn started");
             Thread thread = new Thread(() -> {
-                PlayerCode.turn(game); 
+                try{
+                    PlayerCode.turn(game); 
+                }catch(Exception e){
+                    e.printStackTrace();
+                    System.exit(1);
+                }
             });
            thread.start();
     }

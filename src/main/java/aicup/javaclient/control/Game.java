@@ -29,7 +29,7 @@ public class Game {
     private MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
 
 
-    //TODO: setters and getters
+    
 
     public Game(){
         Initialize init = Initialize.getInstance();
@@ -85,15 +85,14 @@ public class Game {
         return responseMap;
     }
 
-    //TODO:
     // tested/2 test it in the turn state
-    public void nextState(){
+    public boolean nextState() throws Exception{
         JSONObject jsonResponse = request("/next_state",HttpMethod.GET);
-        if(Objects.isNull(jsonResponse.get("error"))){
-           System.out.println("Jooooon");
+        if(jsonResponse.containsKey("error")){
+            throw new Exception((String)jsonResponse.get("error"));
         }
         else{
-            System.out.println("error:" + jsonResponse.get("error"));
+            return true;
         }
         
     }
