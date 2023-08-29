@@ -85,6 +85,7 @@ public class Game {
         return responseMap;
     }
 
+    //TODO:
     // tested/2 test it in the turn state
     public void nextState(){
         JSONObject jsonResponse = request("/next_state",HttpMethod.GET);
@@ -237,9 +238,9 @@ public class Game {
                 }
                 
             } catch (Exception e) {
-                //System.out.println("Connection Refused or Unavailable: " + e.getMessage());
+                System.out.println("Connection Refused or Unavailable: " + e.getMessage());
 
-                System.out.println("aaahh");
+                
             }
         return null;
     } 

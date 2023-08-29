@@ -23,29 +23,33 @@ public class Controller {
         init = Initialize.getInstance();
     }
     
-    
-    //TODO: yout token checnking has a problem the thread will be created either ways
-    
+        
     @GetMapping("/init")
     public ResponseEntity<String> initializer(@RequestHeader("x-access-token") String tokenFromHeader){
-        game.setMyTurn(true);
-        System.out.println("initializer started");
-        Thread thread = new Thread(() -> {
-            PlayerCode.initializer(game); 
-        });
-        thread.start(); 
+        ResponseEntity<String> response = validateRequest(tokenFromHeader);
+        if (response.getStatusCode() == HttpStatus.OK) {
+            game.setMyTurn(true);
+            System.out.println("initializer started");
+            Thread thread = new Thread(() -> {
+                PlayerCode.initializer(game); 
+            });
+           thread.start(); 
+    }
         return validateRequest(tokenFromHeader);
 
     }
 
     @GetMapping("/turn")
     public ResponseEntity<String> turn(@RequestHeader("x-access-token") String tokenFromHeader){
-        game.setMyTurn(true);
-        System.out.println("turn started");
-        Thread thread = new Thread(() -> {
-            PlayerCode.turn(game); 
-        });
-        thread.start();
+        ResponseEntity<String> response = validateRequest(tokenFromHeader);
+        if (response.getStatusCode() == HttpStatus.OK) {
+            game.setMyTurn(true);
+            System.out.println("turn started");
+            Thread thread = new Thread(() -> {
+                PlayerCode.turn(game); 
+            });
+           thread.start();
+    }
         return validateRequest(tokenFromHeader);
 
     }
@@ -53,17 +57,24 @@ public class Controller {
     
     @GetMapping("/end")
     public ResponseEntity<String> endTurn(@RequestHeader("x-access-token") String tokenFromHeader){
-        game.setMyTurn(false);
-        System.out.println("turn ended");
+        ResponseEntity<String> response = validateRequest(tokenFromHeader);
+        if (response.getStatusCode() == HttpStatus.OK) {
+            game.setMyTurn(false);
+            System.out.println("turn ended");
+        }
         return validateRequest(tokenFromHeader);
     }
 
     
     @GetMapping("/kill")
     public ResponseEntity<String> shutdown(@RequestHeader("x-access-token") String tokenFromHeader){
-        System.out.println("kill");
-        System.exit(0);
+        ResponseEntity<String> response = validateRequest(tokenFromHeader);
+        if (response.getStatusCode() == HttpStatus.OK) {
+            System.out.println("kill");
+            System.exit(0);    
+        } 
         return validateRequest(tokenFromHeader);
+        
 
     }
 

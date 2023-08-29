@@ -19,13 +19,7 @@ public class JavaclientApplication {
         app.setDefaultProperties(Collections.singletonMap("server.port", init.getMyPort()));
 		app.setBannerMode(Banner.Mode.OFF);
         app.run(args);
-		init.ready();
-    
-
-		
-		
-
-		
+		init.ready();		
 
 
 	}
