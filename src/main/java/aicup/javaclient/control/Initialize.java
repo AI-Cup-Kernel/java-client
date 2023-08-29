@@ -20,7 +20,11 @@ import org.springframework.web.client.RestTemplate;
 
 
 
-
+/**
+ * 
+ * A class responsible for initializing the connection between the client server and the kernel server.
+ * 
+*/
 
 @Service
 public class Initialize {
@@ -29,41 +33,48 @@ public class Initialize {
     
     private int password; // the password that I should recieve from the server to authenticate the server 
     private String token; // the token that I should send to the server in my requests for authentication
-    private String serverIp; // the ip of the kernal server
-    private int serverPort;  // the port of the kernal server
-    private int myPort; // the port that I should run my api on    
+    private String serverIp; // the ip of the kernel server
+    private int serverPort;  // the port of the Kernel server
+    private int myPort; // the port that I should run my server on    
     private int id; // the player id
-    private final RestTemplate restTemplate;
-    private String url; // the full server url
-    
+    private final RestTemplate restTemplate; // an object that manage the http requests that I send
+    private String url; //The complete server URL.
+
 
     private static Initialize initialize;
 
-    // a contructor to initialize the needed variables
+    // A contructor to initialize the needed variables
     private Initialize(){
-
-        // TODO: disabling the proxy
-        
-        // init the password
+    
+        // Initialize the password
         Random rand = new SecureRandom(); 
         password = rand.nextInt(100000000, 999999999);
 
-        // init the server configuration
+        // Initialize the Kernel server configuration
         JSONParser parser = new JSONParser();
         try {
-           Object obj = parser.parse(new FileReader("src\\main\\java\\aicup\\javaclient\\config.json"));
-           JSONObject jsonObject = (JSONObject)obj;
-           serverIp = (String)jsonObject.get("server_ip");
-           serverPort  = ((Long)jsonObject.get("server_port")).intValue();
-           url = "http://" + serverIp +":"+ serverPort;
+            
+            // Reading the Kernel server Information from the config file
+            Object obj = parser.parse(new FileReader("src\\main\\java\\aicup\\javaclient\\config.json"));
+            JSONObject jsonObject = (JSONObject)obj;
+            serverIp = (String)jsonObject.get("server_ip");
+            serverPort  = ((Long)jsonObject.get("server_port")).intValue();
+            
+            // Formatting the URL
+            url = "http://" + serverIp +":"+ serverPort;
            
-        } catch(Exception e) {
+        }
+        // Handling any error that may occur when reading the config file
+        catch(Exception e) {
             System.out.println("Error in reading conf.json (the path of the file should be in src\\main\\java\\aicup\\javaclient\\config.json)");
             System.exit(0);
         }
         
+        // Initializing the RestTemplate object to send HTTP requests using it.
         this.restTemplate = new RestTemplate();
     }
+
+    // Implementing the Singleton design pattern for our Initialize class to ensure a consistent object across multiple classes
     public static Initialize getInstance(){
         if(Objects.isNull(initialize)){
             initialize = new Initialize();
@@ -73,6 +84,19 @@ public class Initialize {
 
     
 
+    /**
+     * 
+     * A function that sends an HTTP request to the Kernel server for the purpose of logging into the game.
+     * 
+     * It sends the password variable in the form data format, allowing the kernel server to include it in the
+     * x-access-token header each time its made request. This enables the client server to authenticate 
+     * the Kernel server request.
+     * 
+     * it receives the player ID and the token, which the client needs to include in every request for authentication,
+     * along with the port on which the client server should operate.
+     * 
+     */
+    
     public void login(){
 
         // Constructing the url
@@ -86,7 +110,7 @@ public class Initialize {
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(formData, headers);
         
-        // Request
+        // Sending the request
         try{
             ResponseEntity<String> response = restTemplate.postForEntity(path, requestEntity, String.class);
         
@@ -114,13 +138,25 @@ public class Initialize {
         }
     }
 
+
+    /**
+     * 
+     * A function that sends an HTTP request to the Kernel server to confirm that the server is up 
+     * and the client is prepared to start the game.
+     * 
+     * It includes the token obtained from the login function in the request header for authentication purposes.
+     * 
+     */
+
+
     public void ready(){
-        //initializing the request
+        // Initializing the request
         String path = url + "/ready";
         HttpHeaders headers = new HttpHeaders();
         headers.set("x-access-token", token);
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);
-        //sending the request
+        
+        // Sending the request
         try{
             ResponseEntity<String> response = restTemplate.exchange(path, HttpMethod.GET, requestEntity, String.class);
             

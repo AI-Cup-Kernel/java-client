@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -19,18 +18,24 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+
+
+/**
+ * Represents a class that controls interactions with the game server.
+ */
+
 public class Game {
 
-    private String token;
-    private String url;
-    private boolean myTurn;
-    private final RestTemplate restTemplate ;
+    private String token;// the token that I should send to the server in my requests for authentication
+    private String url; //The complete server URL.
+    private boolean myTurn; // True if its the player turn
+    private final RestTemplate restTemplate; // an object that manage the http requests that I send
 
     private MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
 
 
     
-
+    // A contructor to initialize the needed variables
     public Game(){
         Initialize init = Initialize.getInstance();
         token = init.getToken();
@@ -39,22 +44,36 @@ public class Game {
         restTemplate = new RestTemplate();
     }   
 
-    // TODO: handle output (errors status codes, ....)
-
-    //tested
+    /**
+     * Retrieves a map of node owners.
+     *
+     * @return A map containing node IDs as keys and player IDs as values.
+     */
     public Map<Integer, Integer> getOwners(){
         JSONObject jsonResponse = request("/get_owners",HttpMethod.GET);
         return jsonToIntMap(jsonResponse);
 
     }
-    //tested
+    
+
+    /**
+     * Retrieves a map of the number of troops on each node.
+     *
+     * @return A map containing node IDs as keys and troop counts as values.
+     */
     public Map<Integer, Integer> getNumberOfTroops(){
             
         JSONObject jsonResponse = request("/get_troops_count",HttpMethod.GET);
         return jsonToIntMap(jsonResponse);
 
     }
-    //tested
+
+
+    /**
+     * Retrieves the current state of the game.
+     *
+     * @return The state of the game.
+     */
     public int getState(){
         JSONObject jsonResponse = request("/get_state",HttpMethod.GET);
         int state = ((Long) jsonResponse.get("state")).intValue();
@@ -62,13 +81,23 @@ public class Game {
     }
 
 
-    //tested
+    /**
+     * Retrieves the current turn number.
+     *
+     * @return The current turn number.
+     */
     public int getTurnNumber(){
         JSONObject jsonResponse = request("/get_turn_number",HttpMethod.GET);
         int turn = ((Long) jsonResponse.get("turn_number")).intValue();
         return turn;    
     }
-    //tested
+
+
+    /**
+     * Retrieves a map of node adjacency relationships.
+     *
+     * @return A map containing node IDs as keys and lists of adjacent node IDs as values.
+     */
     public Map<Integer,List<Integer>> getAdjacency(){
         JSONObject jsonResponse = request("/get_adj",HttpMethod.GET);
         Map<Integer, List<Integer>> responseMap = new HashMap<>();
@@ -85,7 +114,12 @@ public class Game {
         return responseMap;
     }
 
-    // tested/2 test it in the turn state
+    /**
+     * Advances the game state to the next state.
+     *
+     * @return True if the state transition was successful, otherwise false.
+     * @throws Exception If there is an error during the state transition.
+     */ 
     public boolean nextState() throws Exception{
         JSONObject jsonResponse = request("/next_state",HttpMethod.GET);
         if(jsonResponse.containsKey("error")){
@@ -97,7 +131,13 @@ public class Game {
         
     }
 
-    //tested
+    /**
+     * Places a single troop on the specified node.
+     *
+     * @param nodeId The ID of the node where the troop will be placed.
+     * @return True if the troop placement was successful, otherwise false.
+     * @throws Exception If there is an error during the troop placement.
+     */
     public boolean putOneTroop(int nodeId) throws Exception{
         formData.clear();
         formData.add("node_id",Integer.toString(nodeId)); 
@@ -110,7 +150,14 @@ public class Game {
         }
     }
 
-    // tested/2 write a code to test it in turn state
+    /**
+     * Places a specified number of troops on the specified node.
+     *
+     * @param nodeId         The ID of the node where the troops will be placed.
+     * @param numberOfTroops The number of troops to be placed.
+     * @return True if the troop placement was successful, otherwise false.
+     * @throws Exception If there is an error during the troop placement.
+     */
     public boolean putTroop(int nodeId, int numberOfTroops) throws Exception{
         formData.clear();
         formData.add("node_id",Integer.toString(nodeId));
@@ -123,7 +170,12 @@ public class Game {
             return true;     
         }
     }
-    //tested
+    
+    /**
+     * Retrieves the player's ID.
+     *
+     * @return The player's ID.
+     */
     public int getPlayerId(){
         JSONObject jsonResponse = request("/get_player_id",HttpMethod.GET);
         int playerId = ((Long) jsonResponse.get("player_id")).intValue();
@@ -131,6 +183,16 @@ public class Game {
     }
 
 
+
+    /**
+     * Initiates an attack from one node to another with a specified fraction of troops.
+     *
+     * @param originNodeId  The ID of the attacking node.
+     * @param targetNodeId  The ID of the target node.
+     * @param fraction      The fraction of troops to be used in the attack.
+     * @return True if the attack was initiated successfully.
+     * @throws Exception If there is an error during the attack initiation.
+     */
     public boolean attack(int originNodeId, int targetNodeId,float fraction) throws Exception{
         formData.clear();
         formData.add("attacking_id",Integer.toString(originNodeId));
@@ -145,6 +207,16 @@ public class Game {
         }
         
     } 
+
+    /**
+     * Moves a specified number of troops from one node to another.
+     *
+     * @param originNodeId       The ID of the source node.
+     * @param destinationNodeId  The ID of the destination node.
+     * @param numberOfTroops     The number of troops to be moved.
+     * @return True if the troop movement was successful.
+     * @throws Exception If there is an error during the troop movement.
+     */
     public boolean moveTroop(int originNodeId, int destinationNodeId,float numberOfTroops) throws Exception{
         formData.clear();
         formData.add("source",Integer.toString(originNodeId));
@@ -160,13 +232,16 @@ public class Game {
         
     }
 
-    //tested
+    /**
+     * Retrieves a map of strategic nodes and their associated scores.
+     *
+     * @return A map containing node IDs as keys and scores as values.
+     */
     public Map<Integer,Integer> getStrategicNodes(){
         JSONObject jsonResponse = request("/get_strategic_nodes",HttpMethod.GET);
         JSONArray scoreArray = (JSONArray) jsonResponse.get("score");
         JSONArray nodesArray = (JSONArray) jsonResponse.get("strategic_nodes");
 
-        // Create a Map<Integer, Integer> to store the parsed values
         Map<Integer, Integer> responseMap = new HashMap<>();
 
         for (int i = 0; i < nodesArray.size(); i++) {
@@ -177,13 +252,26 @@ public class Game {
         return responseMap;
     }
     
-    //tested
+
+    
+    /**
+     * Retrieves the number of troops that can be placed in the current turn.
+     *
+     * @return The number of troops available for placement.
+     */
     public int getNumberOfTroopsToPut(){
         JSONObject jsonResponse = request("/get_number_of_troops_to_put",HttpMethod.GET);
         int troops = ((Long) jsonResponse.get("number_of_troops")).intValue();
         return troops; 
     }
 
+    /**
+     * Retrieves a list of node IDs that are reachable from the specified node.
+     *
+     * @param nodeId The ID of the source node.
+     * @return A list of reachable node IDs.
+     * @throws Exception If there is an error during the retrieval of reachable nodes.
+     */
     public List<Integer> getReachable(int nodeId) throws Exception{
         formData.clear();
         formData.add("node_id",Integer.toString(nodeId));
@@ -202,6 +290,15 @@ public class Game {
         }
     }
 
+
+    /**
+     * Sends an HTTP request to the server and processes the response.
+     *
+     * 
+     * @param path       The path of the request.
+     * @param httpMethod The HTTP method (GET or POST).
+     * @return The JSON response from the server.
+     */
     private JSONObject request(String path,HttpMethod httpMethod){
             //initializing the request
             String fullUrl = url + path;
@@ -244,6 +341,13 @@ public class Game {
         return null;
     } 
 
+
+    /**
+     * Converts a JSON response to a map of integer keys and values.
+     *
+     * @param jsonResponse The JSON response to be converted.
+     * @return A map containing integer keys and values.
+     */
     private Map<Integer,Integer> jsonToIntMap(JSONObject jsonResponse){
         Map<Integer, Integer> responseMap = new HashMap<>();
         for (Object key : jsonResponse.keySet()) {

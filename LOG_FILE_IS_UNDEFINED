@@ -1,0 +1,36 @@
+2023-08-30T01:14:47.891+03:30  INFO 10344 --- [main] aicup.javaclient.JavaclientApplication   : Starting JavaclientApplication using Java 17.0.7 with PID 10344 (C:\Users\alida\OneDrive\Desktop\javaclient\javaclient\target\classes started by alida in C:\Users\alida\OneDrive\Desktop\javaclient\javaclient)
+2023-08-30T01:14:47.893+03:30  INFO 10344 --- [main] aicup.javaclient.JavaclientApplication   : No active profile set, falling back to 1 default profile: "default"
+2023-08-30T01:14:48.612+03:30  INFO 10344 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 2000 (http)
+2023-08-30T01:14:48.623+03:30  INFO 10344 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-08-30T01:14:48.623+03:30  INFO 10344 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.11]
+2023-08-30T01:14:48.751+03:30  INFO 10344 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-08-30T01:14:48.751+03:30  INFO 10344 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 820 ms
+2023-08-30T01:14:49.043+03:30  INFO 10344 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 2000 (http) with context path ''
+2023-08-30T01:14:49.052+03:30  INFO 10344 --- [main] aicup.javaclient.JavaclientApplication   : Started JavaclientApplication in 1.434 seconds (process running for 2.28)
+2023-08-30T01:14:50.381+03:30  INFO 19188 --- [main] aicup.javaclient.JavaclientApplication   : Starting JavaclientApplication using Java 17.0.7 with PID 19188 (C:\Users\alida\OneDrive\Desktop\javaclient\javaclient\target\classes started by alida in C:\Users\alida\OneDrive\Desktop\javaclient\javaclient)
+2023-08-30T01:14:50.383+03:30  INFO 19188 --- [main] aicup.javaclient.JavaclientApplication   : No active profile set, falling back to 1 default profile: "default"
+2023-08-30T01:14:51.151+03:30  INFO 19188 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 2001 (http)
+2023-08-30T01:14:51.162+03:30  INFO 19188 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-08-30T01:14:51.162+03:30  INFO 19188 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.11]
+2023-08-30T01:14:51.249+03:30  INFO 19188 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-08-30T01:14:51.249+03:30  INFO 19188 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 826 ms
+2023-08-30T01:14:51.568+03:30  INFO 19188 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 2001 (http) with context path ''
+2023-08-30T01:14:51.576+03:30  INFO 19188 --- [main] aicup.javaclient.JavaclientApplication   : Started JavaclientApplication in 1.457 seconds (process running for 2.184)
+2023-08-30T01:14:53.700+03:30  INFO 23980 --- [main] aicup.javaclient.JavaclientApplication   : Starting JavaclientApplication using Java 17.0.7 with PID 23980 (C:\Users\alida\OneDrive\Desktop\javaclient\javaclient\target\classes started by alida in C:\Users\alida\OneDrive\Desktop\javaclient\javaclient)
+2023-08-30T01:14:53.701+03:30  INFO 23980 --- [main] aicup.javaclient.JavaclientApplication   : No active profile set, falling back to 1 default profile: "default"
+2023-08-30T01:14:54.401+03:30  INFO 23980 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 2002 (http)
+2023-08-30T01:14:54.412+03:30  INFO 23980 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-08-30T01:14:54.412+03:30  INFO 23980 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.11]
+2023-08-30T01:14:54.497+03:30  INFO 23980 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-08-30T01:14:54.497+03:30  INFO 23980 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 759 ms
+2023-08-30T01:14:54.810+03:30  INFO 23980 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 2002 (http) with context path ''
+2023-08-30T01:14:54.819+03:30  INFO 23980 --- [main] aicup.javaclient.JavaclientApplication   : Started JavaclientApplication in 1.397 seconds (process running for 2.161)
+2023-08-30T01:14:55.877+03:30  INFO 19188 --- [http-nio-2001-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-08-30T01:14:55.878+03:30  INFO 19188 --- [http-nio-2001-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-08-30T01:14:55.878+03:30  INFO 19188 --- [http-nio-2001-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2023-08-30T01:14:56.275+03:30  INFO 23980 --- [http-nio-2002-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-08-30T01:14:56.275+03:30  INFO 23980 --- [http-nio-2002-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-08-30T01:14:56.276+03:30  INFO 23980 --- [http-nio-2002-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2023-08-30T01:14:57.658+03:30  INFO 10344 --- [http-nio-2000-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-08-30T01:14:57.658+03:30  INFO 10344 --- [http-nio-2000-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-08-30T01:14:57.659+03:30  INFO 10344 --- [http-nio-2000-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
