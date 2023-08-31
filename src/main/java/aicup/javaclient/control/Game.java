@@ -283,7 +283,7 @@ public class Game {
             JSONArray jsonArray = (JSONArray) jsonResponse.get("reachable");
             List<Integer> responseList = new ArrayList<>();
             for (Object value : jsonArray) {
-                int intValue = Integer.parseInt((String) value);
+                int intValue = (int) value;
                 responseList.add(intValue);
             }
             return responseList;
