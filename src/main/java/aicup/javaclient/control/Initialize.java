@@ -161,7 +161,6 @@ public class Initialize {
             ResponseEntity<String> response = restTemplate.exchange(path, HttpMethod.GET, requestEntity, String.class);
             
             if(response.getStatusCode().is2xxSuccessful()){
-                System.out.println(response.getBody());
                 System.out.println("ready");
             }
             else{

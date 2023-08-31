@@ -152,7 +152,7 @@ public class Controller {
      * 
      */
     private ResponseEntity<String> validateRequest(String tokenFromHeader){
-        System.out.println(tokenFromHeader);
+
         if (tokenFromHeader.equals(Integer.toString(init.getPassword()))) {
             return ResponseEntity.ok("ok");
         }

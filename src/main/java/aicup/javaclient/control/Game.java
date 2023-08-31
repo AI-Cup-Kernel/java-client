@@ -292,6 +292,42 @@ public class Game {
 
 
     /**
+     * Initiates the process of fortifying a node with a specified number of troops.
+     *
+     * @param nodeId     The ID of the node to be fortified.
+     * @param troopCount The number of troops to be added to the node.
+     * @return True if the fortification process was successful, otherwise false.
+     * @throws Exception If there is an error during the fortification process.
+     */
+    public boolean fort(int nodeId,int troopCount) throws Exception{
+        formData.clear();
+        formData.add("node_id",Integer.toString(nodeId));
+        formData.add("troop_count",Integer.toString(troopCount));
+        JSONObject jsonResponse = request("/fort", HttpMethod.POST);
+        if(jsonResponse.containsKey("error")){
+            throw new Exception((String)jsonResponse.get("error"));
+        }
+        else{
+            return true;
+        }
+        
+    } 
+
+    /**
+     * Retrieves a map of the number of fortification troops available on each node.
+     *
+     * @return A map containing node IDs as keys and the number of fortification troops as values.
+     */
+    public Map<Integer, Integer> getNumberOfFortTroops(){
+            
+        JSONObject jsonResponse = request("/get_number_of_fort_troops",HttpMethod.GET);
+        return jsonToIntMap(jsonResponse);
+
+    }
+
+
+
+    /**
      * Sends an HTTP request to the server and processes the response.
      *
      * 
@@ -351,14 +387,14 @@ public class Game {
     private Map<Integer,Integer> jsonToIntMap(JSONObject jsonResponse){
         Map<Integer, Integer> responseMap = new HashMap<>();
         for (Object key : jsonResponse.keySet()) {
-        String keyString = (String) key;
-        int keyInt = Integer.parseInt(keyString);
-        int valueInt = ((Long) jsonResponse.get(key)).intValue();
-        responseMap.put(keyInt, valueInt);
+            String keyString = (String) key;
+            int keyInt = Integer.parseInt(keyString);
+            int valueInt = ((Long) jsonResponse.get(key)).intValue();
+            responseMap.put(keyInt, valueInt);
         }
         return responseMap;
     } 
-    
+            
     
 
     //getters and setters
