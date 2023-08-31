@@ -185,12 +185,12 @@ public class Game {
 
 
     /**
-     * Initiates an attack from one node to another with a specified fraction of troops.
+     * Attack from one node to another with a specified fraction of troops.
      *
      * @param originNodeId  The ID of the attacking node.
      * @param targetNodeId  The ID of the target node.
      * @param fraction      The fraction of troops to be used in the attack.
-     * @return True if the attack was initiated successfully.
+     * @return True if the attack was successful and the attacker won (won == 1), otherwise false.
      * @throws Exception If there is an error during the attack initiation.
      */
     public boolean attack(int originNodeId, int targetNodeId,float fraction) throws Exception{
