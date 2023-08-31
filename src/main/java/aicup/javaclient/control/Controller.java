@@ -54,8 +54,8 @@ public class Controller {
                 try{
                     PlayerCode.initializer(game); 
                 }catch(Exception e){
+                    System.out.print("ERROR: ");
                     e.printStackTrace();
-                    System.exit(1);
                 }
             });
            thread.start(); 
@@ -87,8 +87,8 @@ public class Controller {
                 try{
                     PlayerCode.turn(game); 
                 }catch(Exception e){
+                    System.out.print("ERROR: ");
                     e.printStackTrace();
-                    System.exit(1);
                 }
             });
            thread.start();
