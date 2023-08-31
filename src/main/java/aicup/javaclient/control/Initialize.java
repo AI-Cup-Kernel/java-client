@@ -55,7 +55,7 @@ public class Initialize {
         try {
             
             // Reading the Kernel server Information from the config file
-            Object obj = parser.parse(new FileReader("src\\main\\java\\aicup\\javaclient\\config.json"));
+            Object obj = parser.parse(new FileReader("src/main/java/aicup/javaclient/config.json"));
             JSONObject jsonObject = (JSONObject)obj;
             serverIp = (String)jsonObject.get("server_ip");
             serverPort  = ((Long)jsonObject.get("server_port")).intValue();
