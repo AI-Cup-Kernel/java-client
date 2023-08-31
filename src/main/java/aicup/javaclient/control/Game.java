@@ -203,7 +203,8 @@ public class Game {
             throw new Exception((String)jsonResponse.get("error"));
         }
         else{
-            return true;
+            int won =  ((Long) jsonResponse.get("won")).intValue();
+            return won == 1;
         }
         
     } 
@@ -283,7 +284,7 @@ public class Game {
             JSONArray jsonArray = (JSONArray) jsonResponse.get("reachable");
             List<Integer> responseList = new ArrayList<>();
             for (Object value : jsonArray) {
-                int intValue = (int) value;
+                int intValue = ((Long) value).intValue();
                 responseList.add(intValue);
             }
             return responseList;
