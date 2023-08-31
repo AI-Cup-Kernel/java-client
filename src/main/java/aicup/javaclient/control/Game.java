@@ -190,14 +190,16 @@ public class Game {
      * @param originNodeId  The ID of the attacking node.
      * @param targetNodeId  The ID of the target node.
      * @param fraction      The fraction of troops to be used in the attack.
+     * @param fraction      The fraction of troops to be moved to the targetNode if the attack was succesful.
      * @return True if the attack was successful and the attacker won (won == 1), otherwise false.
      * @throws Exception If there is an error during the attack initiation.
      */
-    public boolean attack(int originNodeId, int targetNodeId,float fraction) throws Exception{
+    public boolean attack(int originNodeId, int targetNodeId,float fraction,float moveFraction) throws Exception{
         formData.clear();
         formData.add("attacking_id",Integer.toString(originNodeId));
         formData.add("target_id",Integer.toString(targetNodeId));
         formData.add("fraction",Float.toString(fraction));
+        formData.add("move_fraction",Float.toString(moveFraction));
         JSONObject jsonResponse = request("/attack", HttpMethod.POST);
         if(jsonResponse.containsKey("error")){
             throw new Exception((String)jsonResponse.get("error"));
