@@ -1,6 +1,7 @@
 package aicup.javaclient.control;
 
 
+
 import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -54,22 +55,18 @@ public class Initialize {
 
         // Initialize the Kernel server configuration
         JSONParser parser = new JSONParser();
-        try {
+        
+        try {    
             // Reading the Kernel server Information from the config file
-            InputStream configFile = Initialize.class.getResourceAsStream("config.json");
-            if (configFile != null) {
-                Object obj = parser.parse(new InputStreamReader(configFile));
-                JSONObject jsonObject = (JSONObject) obj;
-                String serverIp = (String) jsonObject.get("server_ip");
-                int serverPort = ((Long) jsonObject.get("server_port")).intValue();
-                
-                // Formatting the URL
-                url = "http://" + serverIp + ":" + serverPort;   
-            } else {
-                System.out.println("config.json not found.");
-                System.exit(1);    
-            }
-        }
+            Object obj = parser.parse(new FileReader("src/main/java/aicup/javaclient/config.json"));
+            JSONObject jsonObject = (JSONObject)obj;
+            serverIp = (String)jsonObject.get("server_ip");
+            serverPort  = ((Long)jsonObject.get("server_port")).intValue();
+            
+            // Formatting the URL
+            url = "http://" + serverIp +":"+ serverPort;
+           
+        } 
         // Handling any error that may occur when reading the config file
         catch(Exception e) {
             //System.out.println("Error in reading conf.json (the path of the file should be in src\\main\\java\\aicup\\javaclient\\config.json)");
