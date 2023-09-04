@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -204,9 +205,11 @@ public class Game {
         if(jsonResponse.containsKey("error")){
             throw new Exception((String)jsonResponse.get("error"));
         }
+
         else{
             int won =  ((Long) jsonResponse.get("won")).intValue();
             return won == 1;
+            
         }
         
     } 
@@ -220,11 +223,11 @@ public class Game {
      * @return True if the troop movement was successful.
      * @throws Exception If there is an error during the troop movement.
      */
-    public boolean moveTroop(int originNodeId, int destinationNodeId,double numberOfTroops) throws Exception{
+    public boolean moveTroop(int originNodeId, int destinationNodeId,int numberOfTroops) throws Exception{
         formData.clear();
         formData.add("source",Integer.toString(originNodeId));
         formData.add("destination",Integer.toString(destinationNodeId));
-        formData.add("troop_count",Double.toString(numberOfTroops));
+        formData.add("troop_count",Integer.toString(numberOfTroops));
         JSONObject jsonResponse = request("/move_troop", HttpMethod.POST);
         if(jsonResponse.containsKey("error")){
             throw new Exception((String)jsonResponse.get("error"));
