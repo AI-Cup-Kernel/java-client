@@ -3,8 +3,6 @@ package aicup.javaclient.control;
 
 
 import java.io.FileReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.security.SecureRandom;
 import java.util.Objects;
 import java.util.Random;
@@ -58,7 +56,7 @@ public class Initialize {
         
         try {    
             // Reading the Kernel server Information from the config file
-            Object obj = parser.parse(new FileReader("src/main/java/aicup/javaclient/config.json"));
+            Object obj = parser.parse(new FileReader("src/main/java/aicup/javaclient/control/config.json"));
             JSONObject jsonObject = (JSONObject)obj;
             serverIp = (String)jsonObject.get("server_ip");
             serverPort  = ((Long)jsonObject.get("server_port")).intValue();
@@ -151,8 +149,6 @@ public class Initialize {
      * It includes the token obtained from the login function in the request header for authentication purposes.
      * 
      */
-
-
     public void ready(){
         // Initializing the request
         String path = url + "/ready";
