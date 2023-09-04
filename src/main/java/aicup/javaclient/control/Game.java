@@ -220,11 +220,11 @@ public class Game {
      * @return True if the troop movement was successful.
      * @throws Exception If there is an error during the troop movement.
      */
-    public boolean moveTroop(int originNodeId, int destinationNodeId,float numberOfTroops) throws Exception{
+    public boolean moveTroop(int originNodeId, int destinationNodeId,double numberOfTroops) throws Exception{
         formData.clear();
         formData.add("source",Integer.toString(originNodeId));
         formData.add("destination",Integer.toString(destinationNodeId));
-        formData.add("troop_count",Float.toString(numberOfTroops));
+        formData.add("troop_count",Double.toString(numberOfTroops));
         JSONObject jsonResponse = request("/move_troop", HttpMethod.POST);
         if(jsonResponse.containsKey("error")){
             throw new Exception((String)jsonResponse.get("error"));
