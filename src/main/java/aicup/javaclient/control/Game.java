@@ -47,7 +47,7 @@ public class Game {
     /**
      * Retrieves a map of node owners.
      *
-     * @return A map containing node IDs as keys and player IDs as values.
+     * @return A map containing node IDs as keys and player IDs as values (-1 if it doesn't has an owner).
      */
     public Map<Integer, Integer> getOwners(){
         JSONObject jsonResponse = request("/get_owners",HttpMethod.GET);
@@ -117,7 +117,7 @@ public class Game {
     /**
      * Advances the game state to the next state.
      *
-     * @return True if the state transition was successful, otherwise false.
+     * @return True if the state transition was successful.
      * @throws Exception If there is an error during the state transition.
      */ 
     public boolean nextState() throws Exception{
@@ -135,7 +135,7 @@ public class Game {
      * Places a single troop on the specified node.
      *
      * @param nodeId The ID of the node where the troop will be placed.
-     * @return True if the troop placement was successful, otherwise false.
+     * @return True if the troop placement was successful.
      * @throws Exception If there is an error during the troop placement.
      */
     public boolean putOneTroop(int nodeId) throws Exception{
@@ -155,7 +155,7 @@ public class Game {
      *
      * @param nodeId         The ID of the node where the troops will be placed.
      * @param numberOfTroops The number of troops to be placed.
-     * @return True if the troop placement was successful, otherwise false.
+     * @return True if the troop placement was successful.
      * @throws Exception If there is an error during the troop placement.
      */
     public boolean putTroop(int nodeId, int numberOfTroops) throws Exception{
@@ -190,16 +190,16 @@ public class Game {
      * @param originNodeId  The ID of the attacking node.
      * @param targetNodeId  The ID of the target node.
      * @param fraction      The fraction of troops to be used in the attack.
-     * @param fraction      The fraction of troops to be moved to the targetNode if the attack was succesful.
+     * @param moveFraction      The fraction of troops to be moved to the targetNode if the attack was succesful.
      * @return True if the attack was successful and the attacker won (won == 1), otherwise false.
      * @throws Exception If there is an error during the attack initiation.
      */
-    public boolean attack(int originNodeId, int targetNodeId,float fraction,float moveFraction) throws Exception{
+    public boolean attack(int originNodeId, int targetNodeId,double fraction,double moveFraction) throws Exception{
         formData.clear();
         formData.add("attacking_id",Integer.toString(originNodeId));
         formData.add("target_id",Integer.toString(targetNodeId));
-        formData.add("fraction",Float.toString(fraction));
-        formData.add("move_fraction",Float.toString(moveFraction));
+        formData.add("fraction",Double.toString(fraction));
+        formData.add("move_fraction",Double.toString(moveFraction));
         JSONObject jsonResponse = request("/attack", HttpMethod.POST);
         if(jsonResponse.containsKey("error")){
             throw new Exception((String)jsonResponse.get("error"));
@@ -299,7 +299,7 @@ public class Game {
      *
      * @param nodeId     The ID of the node to be fortified.
      * @param troopCount The number of troops to be added to the node.
-     * @return True if the fortification process was successful, otherwise false.
+     * @return True if the fortification process was successful.
      * @throws Exception If there is an error during the fortification process.
      */
     public boolean fort(int nodeId,int troopCount) throws Exception{
