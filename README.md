@@ -1,1 +1,3 @@
-# Out of all the programming languages around the world, you're choosing Java!!! You really need therapy.
+# Java Client
+
+Just open the project in your favorite IDE and run it!
