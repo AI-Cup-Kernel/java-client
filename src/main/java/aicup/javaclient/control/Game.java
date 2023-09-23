@@ -49,6 +49,7 @@ public class Game {
      * Retrieves a map of node owners.
      *
      * @return A map containing node IDs as keys and player IDs as values (-1 if it doesn't has an owner).
+     * @throws Exception If there is an error during the process.
      */
     public Map<Integer, Integer> getOwners() throws Exception{
         JSONObject jsonResponse = request("/get_owners",HttpMethod.GET);
@@ -62,6 +63,7 @@ public class Game {
      * Retrieves a map of the number of troops on each node.
      *
      * @return A map containing node IDs as keys and troop counts as values.
+     * @throws Exception If there is an error during the process.
      */
     public Map<Integer, Integer> getNumberOfTroops() throws Exception{
         JSONObject jsonResponse = request("/get_troops_count",HttpMethod.GET);
@@ -75,6 +77,7 @@ public class Game {
      * Retrieves the current state of the game.
      *
      * @return The state of the game.
+     * @throws Exception If there is an error during the process.
      */
     public int getState() throws Exception{
         JSONObject jsonResponse = request("/get_state",HttpMethod.GET);
@@ -88,6 +91,7 @@ public class Game {
      * Retrieves the current turn number.
      *
      * @return The current turn number.
+     * @throws Exception If there is an error during the process.
      */
     public int getTurnNumber() throws Exception{
         JSONObject jsonResponse = request("/get_turn_number",HttpMethod.GET);
@@ -101,6 +105,7 @@ public class Game {
      * Retrieves a map of node adjacency relationships.
      *
      * @return A map containing node IDs as keys and lists of adjacent node IDs as values.
+     * @throws Exception If there is an error during the process.
      */
     public Map<Integer,List<Integer>> getAdjacency()throws Exception{
         JSONObject jsonResponse = request("/get_adj",HttpMethod.GET);
@@ -171,6 +176,7 @@ public class Game {
      * Retrieves the player's ID.
      *
      * @return The player's ID.
+     * @throws Exception If there is an error during the process.
      */
     public int getPlayerId() throws Exception{
         JSONObject jsonResponse = request("/get_player_id",HttpMethod.GET);
@@ -230,6 +236,7 @@ public class Game {
      * Retrieves a map of strategic nodes and their associated scores.
      *
      * @return A map containing node IDs as keys and scores as values.
+     * @throws Exception If there is an error during the process.
      */
     public Map<Integer,Integer> getStrategicNodes() throws Exception{
         JSONObject jsonResponse = request("/get_strategic_nodes",HttpMethod.GET);
@@ -253,6 +260,7 @@ public class Game {
      * Retrieves the number of troops that can be placed in the current turn.
      *
      * @return The number of troops available for placement.
+     * @throws Exception If there is an error during the process.
      */
     public int getNumberOfTroopsToPut() throws Exception{
         JSONObject jsonResponse = request("/get_number_of_troops_to_put",HttpMethod.GET);
@@ -307,6 +315,7 @@ public class Game {
      * Retrieves a map of the number of fortification troops available on each node.
      *
      * @return A map containing node IDs as keys and the number of fortification troops as values.
+     * @throws Exception If there is an error during the process.
      */
     public Map<Integer, Integer> getNumberOfFortTroops() throws Exception{
         JSONObject jsonResponse = request("/get_number_of_fort_troops",HttpMethod.GET);
@@ -315,6 +324,13 @@ public class Game {
 
     }
 
+    /**
+     * Sends a message to be logged on the server's log file.
+     *
+     * @param message The message to be logged on the server's log file.
+     * @return true if the message was successfully added to the log.
+     * @throws Exception If an error occurs during the request or if the response contains an error message.
+     */
     public boolean printer(String message) throws Exception{
         formData.clear();
         formData.add("text", message);
