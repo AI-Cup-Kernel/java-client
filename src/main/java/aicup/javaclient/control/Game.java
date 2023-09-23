@@ -8,6 +8,7 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -311,6 +312,15 @@ public class Game {
         JSONObject jsonResponse = request("/get_number_of_fort_troops",HttpMethod.GET);
         checkError(jsonResponse);
         return jsonToIntMap(jsonResponse);
+
+    }
+
+    public boolean printer(String message) throws Exception{
+        formData.clear();
+        formData.add("text", message);
+        JSONObject jsonResponse = request("/handler", HttpMethod.POST);
+        checkError(jsonResponse);
+        return true;
 
     }
 
