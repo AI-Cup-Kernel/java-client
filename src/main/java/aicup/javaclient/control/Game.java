@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -50,8 +49,9 @@ public class Game {
      *
      * @return A map containing node IDs as keys and player IDs as values (-1 if it doesn't has an owner).
      */
-    public Map<Integer, Integer> getOwners(){
+    public Map<Integer, Integer> getOwners() throws Exception{
         JSONObject jsonResponse = request("/get_owners",HttpMethod.GET);
+        checkError(jsonResponse);
         return jsonToIntMap(jsonResponse);
 
     }
@@ -62,9 +62,9 @@ public class Game {
      *
      * @return A map containing node IDs as keys and troop counts as values.
      */
-    public Map<Integer, Integer> getNumberOfTroops(){
-            
+    public Map<Integer, Integer> getNumberOfTroops() throws Exception{
         JSONObject jsonResponse = request("/get_troops_count",HttpMethod.GET);
+        checkError(jsonResponse);
         return jsonToIntMap(jsonResponse);
 
     }
@@ -75,8 +75,9 @@ public class Game {
      *
      * @return The state of the game.
      */
-    public int getState(){
+    public int getState() throws Exception{
         JSONObject jsonResponse = request("/get_state",HttpMethod.GET);
+        checkError(jsonResponse);
         int state = ((Long) jsonResponse.get("state")).intValue();
         return state;    
     }
@@ -87,8 +88,9 @@ public class Game {
      *
      * @return The current turn number.
      */
-    public int getTurnNumber(){
+    public int getTurnNumber() throws Exception{
         JSONObject jsonResponse = request("/get_turn_number",HttpMethod.GET);
+        checkError(jsonResponse);
         int turn = ((Long) jsonResponse.get("turn_number")).intValue();
         return turn;    
     }
@@ -99,8 +101,9 @@ public class Game {
      *
      * @return A map containing node IDs as keys and lists of adjacent node IDs as values.
      */
-    public Map<Integer,List<Integer>> getAdjacency(){
+    public Map<Integer,List<Integer>> getAdjacency()throws Exception{
         JSONObject jsonResponse = request("/get_adj",HttpMethod.GET);
+        checkError(jsonResponse);
         Map<Integer, List<Integer>> responseMap = new HashMap<>();
         for (Object keyObj : jsonResponse.keySet()) {
             String key = (String) keyObj;
@@ -123,12 +126,9 @@ public class Game {
      */ 
     public boolean nextState() throws Exception{
         JSONObject jsonResponse = request("/next_state",HttpMethod.GET);
-        if(jsonResponse.containsKey("error")){
-            throw new Exception((String)jsonResponse.get("error"));
-        }
-        else{
-            return true;
-        }
+        checkError(jsonResponse);
+        return true;
+        
         
     }
 
@@ -143,12 +143,9 @@ public class Game {
         formData.clear();
         formData.add("node_id",Integer.toString(nodeId)); 
         JSONObject jsonResponse = request("/put_one_troop", HttpMethod.POST);
-        if(jsonResponse.containsKey("error")){
-            throw new Exception((String)jsonResponse.get("error"));
-        }
-        else{
-            return true;
-        }
+        checkError(jsonResponse);
+        return true;
+        
     }
 
     /**
@@ -164,12 +161,9 @@ public class Game {
         formData.add("node_id",Integer.toString(nodeId));
         formData.add("number_of_troops",Integer.toString(numberOfTroops));
         JSONObject jsonResponse = request("/put_troop", HttpMethod.POST);
-        if(jsonResponse.containsKey("error")){
-            throw new Exception((String)jsonResponse.get("error"));
-        }
-        else{
-            return true;     
-        }
+        checkError(jsonResponse);
+        return true;     
+        
     }
     
     /**
@@ -177,8 +171,9 @@ public class Game {
      *
      * @return The player's ID.
      */
-    public int getPlayerId(){
+    public int getPlayerId() throws Exception{
         JSONObject jsonResponse = request("/get_player_id",HttpMethod.GET);
+        checkError(jsonResponse);
         int playerId = ((Long) jsonResponse.get("player_id")).intValue();
         return playerId;  
     }
@@ -202,15 +197,10 @@ public class Game {
         formData.add("fraction",Double.toString(fraction));
         formData.add("move_fraction",Double.toString(moveFraction));
         JSONObject jsonResponse = request("/attack", HttpMethod.POST);
-        if(jsonResponse.containsKey("error")){
-            throw new Exception((String)jsonResponse.get("error"));
-        }
-
-        else{
-            int won =  ((Long) jsonResponse.get("won")).intValue();
-            return won == 1;
+        checkError(jsonResponse);
+        int won =  ((Long) jsonResponse.get("won")).intValue();
+        return won == 1;
             
-        }
         
     } 
 
@@ -229,12 +219,9 @@ public class Game {
         formData.add("destination",Integer.toString(destinationNodeId));
         formData.add("troop_count",Integer.toString(numberOfTroops));
         JSONObject jsonResponse = request("/move_troop", HttpMethod.POST);
-        if(jsonResponse.containsKey("error")){
-            throw new Exception((String)jsonResponse.get("error"));
-        }
-        else{
-            return true;
-        }
+        checkError(jsonResponse);
+        return true;
+        
         
     }
 
@@ -243,8 +230,9 @@ public class Game {
      *
      * @return A map containing node IDs as keys and scores as values.
      */
-    public Map<Integer,Integer> getStrategicNodes(){
+    public Map<Integer,Integer> getStrategicNodes() throws Exception{
         JSONObject jsonResponse = request("/get_strategic_nodes",HttpMethod.GET);
+        checkError(jsonResponse);
         JSONArray scoreArray = (JSONArray) jsonResponse.get("score");
         JSONArray nodesArray = (JSONArray) jsonResponse.get("strategic_nodes");
 
@@ -265,8 +253,9 @@ public class Game {
      *
      * @return The number of troops available for placement.
      */
-    public int getNumberOfTroopsToPut(){
+    public int getNumberOfTroopsToPut() throws Exception{
         JSONObject jsonResponse = request("/get_number_of_troops_to_put",HttpMethod.GET);
+        checkError(jsonResponse);
         int troops = ((Long) jsonResponse.get("number_of_troops")).intValue();
         return troops; 
     }
@@ -282,18 +271,15 @@ public class Game {
         formData.clear();
         formData.add("node_id",Integer.toString(nodeId));
         JSONObject jsonResponse = request("/get_reachable", HttpMethod.POST);
-        if(jsonResponse.containsKey("error")){
-            throw new Exception((String)jsonResponse.get("error"));
+        checkError(jsonResponse);
+        JSONArray jsonArray = (JSONArray) jsonResponse.get("reachable");
+        List<Integer> responseList = new ArrayList<>();
+        for (Object value : jsonArray) {
+            int intValue = ((Long) value).intValue();
+            responseList.add(intValue);
         }
-        else{
-            JSONArray jsonArray = (JSONArray) jsonResponse.get("reachable");
-            List<Integer> responseList = new ArrayList<>();
-            for (Object value : jsonArray) {
-                int intValue = ((Long) value).intValue();
-                responseList.add(intValue);
-            }
-            return responseList;
-        }
+        return responseList;
+    
     }
 
 
@@ -310,12 +296,9 @@ public class Game {
         formData.add("node_id",Integer.toString(nodeId));
         formData.add("troop_count",Integer.toString(troopCount));
         JSONObject jsonResponse = request("/fort", HttpMethod.POST);
-        if(jsonResponse.containsKey("error")){
-            throw new Exception((String)jsonResponse.get("error"));
-        }
-        else{
-            return true;
-        }
+        checkError(jsonResponse);
+        return true;
+        
         
     } 
 
@@ -324,13 +307,26 @@ public class Game {
      *
      * @return A map containing node IDs as keys and the number of fortification troops as values.
      */
-    public Map<Integer, Integer> getNumberOfFortTroops(){
-            
+    public Map<Integer, Integer> getNumberOfFortTroops() throws Exception{
         JSONObject jsonResponse = request("/get_number_of_fort_troops",HttpMethod.GET);
+        checkError(jsonResponse);
         return jsonToIntMap(jsonResponse);
 
     }
 
+    /**
+     * Checks if the provided JSON response contains an "error" key. If present,
+     * it throws an exception with the error message.
+     *
+     * @param jsonResponse The JSON response to check for errors.
+     * @throws Exception If the JSON response contains an "error" key,
+     *         an exception is thrown with the error message as the reason.
+     */
+    private void checkError(JSONObject jsonResponse) throws Exception{
+        if(jsonResponse.containsKey("error")){
+            throw new Exception((String)jsonResponse.get("error"));
+        }   
+    }
 
 
     /**
